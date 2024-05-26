@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Products() {
+export default function ReqProdUser() {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -18,7 +18,7 @@ export default function Products() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://34.101.74.42/api/request-product');
+      const response = await axios.get('http://localhost:8080/api/request-product');
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -27,7 +27,7 @@ export default function Products() {
 
   const createProduct = async () => {
     try {
-      const response = await axios.post('http://34.101.74.42/api/request-product', newProduct);
+      const response = await axios.post('http://localhost:8080/api/request-product', newProduct);
       setProducts([...products, response.data]);
       setNewProduct({
         name: '',
@@ -43,7 +43,7 @@ export default function Products() {
 
   const updateProduct = async (id, updatedProduct) => {
     try {
-      const response = await axios.put(`http://34.101.74.42/api/request-product/${id}`, updatedProduct);
+      const response = await axios.put(`http://localhost:8080/api/request-product/${id}`, updatedProduct);
       setProducts(products.map((product) => (product.id === id ? response.data : product)));
       setEditingProduct(null);
     } catch (error) {
@@ -53,7 +53,7 @@ export default function Products() {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://34.101.74.42/api/request-product/${id}`);
+      await axios.delete(`http://localhost:8080/api/request-product/${id}`);
       setProducts(products.filter((product) => product.id !== id));
     } catch (error) {
       console.error('Error deleting product:', error);
