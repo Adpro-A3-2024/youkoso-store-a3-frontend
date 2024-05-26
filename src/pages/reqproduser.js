@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from '../styles/ReqProdUser.module.css';
 
 export default function ReqProdUser() {
   const [products, setProducts] = useState([]);
@@ -61,91 +62,105 @@ export default function ReqProdUser() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Request Products</h1>
-      <div>
+      <div className={styles.formContainer}>
         <h2>Make A Request</h2>
         <input
           type="text"
           placeholder="Name"
           value={newProduct.name}
           onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          className={styles.input}
         />
         <input
           type="text"
           placeholder="Picture URL"
           value={newProduct.pictureUrl}
           onChange={(e) => setNewProduct({ ...newProduct, pictureUrl: e.target.value })}
+          className={styles.input}
         />
         <input
           type="number"
           placeholder="Price"
           value={newProduct.price}
           onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          className={styles.input}
         />
         <input
           type="text"
           placeholder="URL"
           value={newProduct.url}
           onChange={(e) => setNewProduct({ ...newProduct, url: e.target.value })}
+          className={styles.input}
         />
-        <input
-          type="text"
-          placeholder="Currency"
+        <select
           value={newProduct.currency}
           onChange={(e) => setNewProduct({ ...newProduct, currency: e.target.value })}
-        />
-        <button onClick={createProduct}>Create</button>
+          className={styles.input}
+        >
+          <option value="IDR">IDR</option>
+          <option value="JPY">JPY</option>
+          <option value="USD">USD</option>
+        </select>
+        <button onClick={createProduct} className={styles.button}>Create</button>
       </div>
 
-      <div>
-        <h2>Existing Request Products</h2>
+      <h2>Your Request Products</h2>
+      <div className={styles.cardContainer}>
         {products.map((product) => (
-          <div key={product.id}>
+          <div key={product.id} className={styles.card}>
             <h3>{product.name}</h3>
-            <img src={product.pictureUrl} alt={product.name} width="100" />
+            <img src={product.pictureUrl} alt={product.name} width="100" className={styles.image}/>
             <p>Price: {product.price} {product.currency}</p>
             <p>URL: <a href={product.url}>{product.url}</a></p>
-            <button onClick={() => deleteProduct(product.id)}>Delete</button>
-            <button onClick={() => setEditingProduct(product)}>Edit</button>
+            <button onClick={() => deleteProduct(product.id)} className={styles.button}>Delete</button>
+            <button onClick={() => setEditingProduct(product)} className={styles.button}>Edit</button>
           </div>
         ))}
       </div>
 
       {editingProduct && (
-        <div>
+        <div className={styles.formContainer}>
           <h2>Edit Request Product</h2>
           <input
             type="text"
             placeholder="Name"
             value={editingProduct.name}
             onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+            className={styles.input}
           />
           <input
             type="text"
             placeholder="Picture URL"
             value={editingProduct.pictureUrl}
             onChange={(e) => setEditingProduct({ ...editingProduct, pictureUrl: e.target.value })}
+            className={styles.input}
           />
           <input
             type="number"
             placeholder="Price"
             value={editingProduct.price}
             onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+            className={styles.input}
           />
           <input
             type="text"
             placeholder="URL"
             value={editingProduct.url}
             onChange={(e) => setEditingProduct({ ...editingProduct, url: e.target.value })}
+            className={styles.input}
           />
-          <input
-            type="text"
-            placeholder="Currency"
+          <select
             value={editingProduct.currency}
             onChange={(e) => setEditingProduct({ ...editingProduct, currency: e.target.value })}
-          />
-          <button onClick={() => updateProduct(editingProduct.id, editingProduct)}>Save</button>
+            className={styles.input}
+          >
+            <option value="IDR">IDR</option>
+            <option value="JPY">JPY</option>
+            <option value="USD">USD</option>
+          </select>
+          <button onClick={() => updateProduct(editingProduct.id, editingProduct)} className={styles.button}>Save</button>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from '../styles/ReqProdAdmin.module.css';
 
 const ReqProdAdmin = () => {
   const [requestProducts, setRequestProducts] = useState([]);
@@ -31,12 +32,22 @@ const ReqProdAdmin = () => {
     };
 
     try {
-      await axios.post('http://placeholder/create-product', productData);
+      await axios.post('https://product-microservice.faizi.biz.id/create-product', productData);
+      await deleteProduct(requestProduct.id);
       alert('Product added successfully');
     } catch (error) {
       console.error('Error adding product', error);
       alert('Failed to add product');
     }
+
+    const deleteProduct = async (id) => {
+        try {
+          await axios.delete(`http://localhost:8080/api/request-product/${id}`);
+          setProducts(products.filter((product) => product.id !== id));
+        } catch (error) {
+          console.error('Error deleting product:', error);
+        }
+      };
   };
 
   if (loading) {
@@ -44,37 +55,22 @@ const ReqProdAdmin = () => {
   }
 
   return (
-    <div>
-      <h1>Admin Page</h1>
-      <h2>Request Products</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Picture</th>
-            <th>URL</th>
-            <th>Currency</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {requestProducts.map((requestProduct) => (
-            <tr key={requestProduct.id}>
-              <td>{requestProduct.name}</td>
-              <td>{requestProduct.price}</td>
-              <td><img src={requestProduct.pictureUrl} alt={requestProduct.name} width="50"/></td>
-              <td>{requestProduct.url}</td>
-              <td>{requestProduct.currency}</td>
-              <td>
-                <button onClick={() => addProductToSystem(requestProduct)}>
-                  Add Product to System
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={styles.container}>
+      <h1 className={styles.header}>Admin Page</h1>
+      <h2 className={styles.header}>Request Products</h2>
+      <div className={styles.cardContainer}>
+        {requestProducts.map((requestProduct) => (
+          <div key={requestProduct.id} className={styles.card}>
+            <h3>{requestProduct.name}</h3>
+            <img src={requestProduct.pictureUrl} alt={requestProduct.name} className={styles.image} />
+            <p>Price: {requestProduct.price} {requestProduct.currency}</p>
+            <p>URL: <a href={requestProduct.url}>{requestProduct.url}</a></p>
+            <button onClick={() => addProductToSystem(requestProduct)} className={styles.button}>
+              Add Product to System
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
